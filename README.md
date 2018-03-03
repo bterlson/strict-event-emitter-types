@@ -28,7 +28,7 @@ interface Events {
 let ee: TypedEventEmitter<EventEmitter, Events> = new EventEmitter;
 
 // now enjoy your strongly typed EventEmitter API!
-ee.on('done'); // adding a callback here would be an error
+ee.on('done', () => {}); // adding a callback parameter is an error
 ee.on('newValue', x => x); // x is contextually typed to number
 ee.on('somethingElse'); // mistyped events are an error
 ```
