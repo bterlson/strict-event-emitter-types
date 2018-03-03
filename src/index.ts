@@ -1,7 +1,6 @@
 export type MatchingKeys<T, U, K extends keyof T = keyof T> =
   K extends (T[K] extends U ? K : never) ? K : never;
 
-// this is more complex than it needs to be to work around a bug.
 export type VoidKeys<Record> = MatchingKeys<Record, void>;
 
 type TypedEventEmitter<EmitterType, Events, EmitEvents = Events> = Pick<EmitterType, Exclude<keyof EmitterType, 'on' | 'emit' | 'addListener' | 'once' | 'removeListener'>> &
