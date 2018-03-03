@@ -1,0 +1,32 @@
+{
+  "name": "typed-event-emitter",
+  "version": "1.0.0",
+  "description": "Strongly type any EventEmitter-like interface on any object",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc"
+  },
+  "types": "types",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bterlson/typed-event-emitter.git"
+  },
+  "keywords": [
+    "TypeScript",
+    "TS",
+    "EventEmitter",
+    "events"
+  ],
+  "author": "Brian Terlson <brian.terlson@microsoft.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/bterlson/typed-event-emitter/issues"
+  },
+  "homepage": "https://github.com/bterlson/typed-event-emitter#readme",
+  "dependencies": {},
+  "devDependencies": {
+    "@types/node": "^9.4.6",
+    "dtslint": "^0.2.0",
+    "typescript": "^2.8.0-dev.20180301"
+  }
+}
