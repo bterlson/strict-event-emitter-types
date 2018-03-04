@@ -3,10 +3,11 @@ export type MatchingKeys<T, U, K extends keyof T = keyof T> =
 
 export type VoidKeys<Record> = MatchingKeys<Record, void>;
 
+// really wish I could stash these under a unique symbol key
 export interface InstantiationRecord<T, U, V> {
-  _emitterType?: T,
-  _eventsType?: U,
-  _emitType?: V
+  ' _emitterType'?: T,
+  ' _eventsType'?: U,
+  ' _emitType'?: V
 }
 
 export type TypedEventEmitter<
@@ -41,7 +42,7 @@ export default TypedEventEmitter;
 export type NoUndefined<T> = T extends undefined ? never : T;
 export type Broadcast<
   TEmitter extends InstantiationRecord<any, any, any>,
-  TEmitRecord extends NoUndefined<TEmitter['_emitType']> = NoUndefined<TEmitter['_emitType']>,
+  TEmitRecord extends NoUndefined<TEmitter[' _emitType']> = NoUndefined<TEmitter[' _emitType']>,
   VK extends VoidKeys<TEmitRecord> = VoidKeys<TEmitRecord>,
   NVK extends Exclude<keyof TEmitRecord, VK> =  Exclude<keyof TEmitRecord, VK>
   > = {
