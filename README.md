@@ -63,6 +63,8 @@ A type for a function which takes (and strictly checks) an emit event and a payl
 Useful for broadcast abstractions. It is not possible to contextually type assigments to this type, so your declarations will look something like this:
 
 ```ts
+import { Broadcast } from 'typed-event-emitter';
+
 const broadcast: Broadcast<ServerSocket> = function (event: string, payload?: any) {
   // ...
 }
