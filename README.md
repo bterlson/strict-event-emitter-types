@@ -33,7 +33,7 @@ ee.on('newValue', x => x); // x is contextually typed to number
 ee.on('somethingElse'); // mistyped events are an error
 ```
 
-### TypedEventEmitter<TEmitterType, TEventRecord, TEmitRecord>
+### TypedEventEmitter&lt;TEmitterType, TEventRecord, TEmitRecord>
 The default export. A generic type that takes three type parameters:
 
 1. *TEmitterType*: Your EventEmitter type (e.g. node's EventEmitter or socket.io socket)
@@ -57,7 +57,7 @@ let socket: ServerSocket = new SocketIO.Socket();
 let socket: ClientSocket = new SocketIOClient.Socket();
 ```
 
-### Broadcast<TEmitter>
+### Broadcast&lt;TEmitter>
 A type for a function which takes (and strictly checks) an emit event and a payload. *TEmitter* is the event emitter type instantiated from TypedEventEmitter.
 
 Useful for broadcast abstractions. It is not possible to contextually type assigments to this type, so your declarations will look something like this:
