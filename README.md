@@ -28,9 +28,12 @@ interface Events {
 let ee: TypedEventEmitter<EventEmitter, Events> = new EventEmitter;
 
 // now enjoy your strongly typed EventEmitter API!
-ee.on('done', () => {}); // adding a callback parameter is an error
 ee.on('newValue', x => x); // x is contextually typed to number
-ee.on('somethingElse'); // mistyped events are an error
+
+ee.on('somethingElse'); // Error: unknown event
+ee.on('done', x => x); // Error: 'done' does not have a payload
+ee.emit('newValue', 'hello!'); // Error: incorrect payload
+ee.emit('newValue'); // Error: forgotten payload
 ```
 
 ### TypedEventEmitter&lt;TEmitterType, TEventRecord, TEmitRecord>
