@@ -2,7 +2,7 @@
 
 **NOTE: REQUIRES TYPESCRIPT 2.8 SUPPORT FOR CONDITIONAL TYPES**
 
-A TypeScript library for strongly typed event emitters in 0 kB. Works with any object implementing the EventEmitter API, and does not wrap or alter the object. As a result, the library is just types.
+A TypeScript library for strongly typed event emitters in 0 kB. Works with any kind of Event Emitter.
 
 ### Installing
 
@@ -33,9 +33,14 @@ ee.on('newValue', x => x); // x is contextually typed to number
 ee.on('somethingElse'); // mistyped events are an error
 ```
 
-Typed Event Emitter's default export is a generic type that takes three type parameters: your EventEmitter type, a record of your events, and optionally a record of what you emit. The third type parameter defaults to the second, but it is handy when typing web sockets where client and server can listen to and emit different events.
+### TypedEventEmitter<TEmitterType, TEventRecord, TEmitRecord>
+The default export. A generic type that takes three type parameters:
 
-For example, if you are using socket.io:
+1. *TEmitterType*: Your EventEmitter type (e.g. node's EventEmitter or socket.io socket)
+2. *TEventRecord*: A type mapping event names to event payloads
+3. *TEmitRecord*: Optionally, a similar type mapping things you can emit.
+
+The third parameter is handy when typing web sockets where client and server can listen to and emit different events. For example, if you are using socket.io:
 
 ```ts
 // create types representing the server side and client
@@ -49,5 +54,18 @@ export type ClientSocket =
 let socket: ServerSocket = new SocketIO.Socket();
 
 // elsewhere on client
-let socket: ServerSocket = new SocketIOClient.Socket();
+let socket: ClientSocket = new SocketIOClient.Socket();
 ```
+
+### Broadcast<TEmitter>
+A type for a function which takes (and strictly checks) an emit event and a payload. *TEmitter* is the event emitter type instantiated from TypedEventEmitter.
+
+Useful for broadcast abstractions. It is not possible to contextually type assigments to this type, so your declarations will look something like this:
+
+```ts
+const broadcast: Broadcast<ServerSocket> = function (event: string, payload?: any) {
+  // ...
+}
+```
+
+Note that the loose types for event and payload only apply inside the broadcast function (consumers will see a much stricter signature). Declaring more precise types or narrowing the values using type guards would allow strongly-typed dispatching to multiple emitters.
