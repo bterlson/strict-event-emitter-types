@@ -2,11 +2,11 @@
   "name": "typed-event-emitter",
   "version": "1.0.0",
   "description": "Strongly type any EventEmitter-like interface on any object",
-  "main": "dist/index.js",
+  "main": "dist/src/index.js",
   "scripts": {
     "build": "tsc"
   },
-  "types": "types",
+  "types": "types/src",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/bterlson/typed-event-emitter.git"
