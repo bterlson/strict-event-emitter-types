@@ -25,7 +25,7 @@ interface Events {
 }
 
 // Create a typed event emitter
-let ee: TypedEventEmitter<EventEmitter, Events> = new EventEmitter;
+let ee: StrictEventEmitter<EventEmitter, Events> = new EventEmitter;
 
 // now enjoy your strongly typed EventEmitter API!
 ee.on('newValue', x => x); // x is contextually typed to number
@@ -51,7 +51,7 @@ The third parameter is handy when typing web sockets where client and server can
 export type ServerSocket =
   StrictEventEmitter<SocketIO.Socket, EventsFromServer, EventsFromClient>;
 export type ClientSocket =
-  TypedEventEmitter<SocketIOClient.Socket, EventsFromClient, EventsFromServer>;
+  StrictEventEmitter<SocketIOClient.Socket, EventsFromClient, EventsFromServer>;
 
 // elsewhere on server
 let serverSocket: ServerSocket = new SocketIO.Socket();
