@@ -48,7 +48,7 @@ The third parameter is handy when typing web sockets where client and server can
 export type ServerSocket =
   TypedEventEmitter<SocketIO.Socket, ServerSideProtocol, ClientSideProtocol>;
 export type ClientSocket =
-  TypedEventEmitter<SocketIOClient.Socket, ServerSideProtocol>;
+  TypedEventEmitter<SocketIOClient.Socket, ClientSideProtocol, ServerSideProtocol>;
 
 // elsewhere on server
 let socket: ServerSocket = new SocketIO.Socket();
@@ -70,4 +70,4 @@ const broadcast: Broadcast<ServerSocket> = function (event: string, payload?: an
 }
 ```
 
-Note that the loose types for event and payload only apply inside the broadcast function (consumers will see a much stricter signature). Declaring more precise types or narrowing the values using type guards would allow strongly-typed dispatching to multiple emitters.
+Note that the loose types for event and payload only apply inside the broadcast function (consumers will see a much stricter signature). Declaring more precise parameter types or narrowing using type guards would allow strongly-typed dispatching to emitters.
