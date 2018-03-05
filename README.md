@@ -54,14 +54,18 @@ export type ClientSocket =
   TypedEventEmitter<SocketIOClient.Socket, EventsFromClient, EventsFromServer>;
 
 // elsewhere on server
-let socket: ServerSocket = new SocketIO.Socket();
+let serverSocket: ServerSocket = new SocketIO.Socket();
+serverSocket.on(/* only events that are sent from the client are allowed */, ...)
+serverSocket.emit(/* only events that are emitted from the server are allowed */, ...)
 
 // elsewhere on client
-let socket: ClientSocket = new SocketIOClient.Socket();
+let clientSocket: ClientSocket = new SocketIOClient.Socket();
+clientSocket.on(/* only events that are sent from the server are allowed */, ...)
+clientSocket.emit(/* only events that are emitted from the client are allowed */, ...)
 ```
 
-### StrictBroadcast&lt;TEmitter>
-A type for a function which takes (and strictly checks) an emit event and a payload. *TEmitter* is the event emitter type instantiated from StrictEventEmitter.
+### StrictBroadcast&lt;TStrictEventEmitter>
+A type for a function which takes (and strictly checks) an emit event and a payload. *TStrictEventEmitter* is the event emitter type instantiated from StrictEventEmitter.
 
 Useful for broadcast abstractions. It is not possible to contextually type assigments to this type, so your declarations will look something like this:
 

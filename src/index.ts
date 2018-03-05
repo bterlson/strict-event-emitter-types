@@ -10,6 +10,8 @@ export interface TypeRecord<T, U, V> {
   ' _emitType'?: V
 }
 
+export type OverriddenKeys = 'on' | 'emit' | 'addListener' | 'once' | 'removeListener' | 'addEventListener';
+
 export type StrictEventEmitter<
   TEmitterType,
   TEventRecord,
@@ -17,16 +19,21 @@ export type StrictEventEmitter<
   EventVK extends VoidKeys<TEventRecord> = VoidKeys<TEventRecord>,
   EventNVK extends Exclude<keyof TEventRecord, EventVK> =  Exclude<keyof TEventRecord, EventVK>,
   EmitVK extends VoidKeys<TEmitRecord> = VoidKeys<TEmitRecord>,
-  EmitNVK extends Exclude<keyof TEmitRecord, EmitVK> =  Exclude<keyof TEmitRecord, EmitVK>
+  EmitNVK extends Exclude<keyof TEmitRecord, EmitVK> =  Exclude<keyof TEmitRecord, EmitVK>,
+  UnneededMethods extends Exclude<OverriddenKeys, keyof TEmitterType> = Exclude<OverriddenKeys, keyof TEmitterType>,
+  NeededMethods extends Exclude<OverriddenKeys, UnneededMethods> = Exclude<OverriddenKeys, UnneededMethods>
   > =
-  TypeRecord<TEmitterType, TEventRecord, TEmitRecord> &
-  Pick<TEmitterType, Exclude<keyof TEmitterType, 'on' | 'emit' | 'addListener' | 'once' | 'removeListener'>> &
-  {
+  TypeRecord<TEmitterType, TEventRecord, TEmitRecord> & // stores metadata
+  Pick<TEmitterType, Exclude<keyof TEmitterType, OverriddenKeys>> & // has all the properties of 
+  Pick<{
     on<P extends EventNVK>(event: P, listener: (m: TEventRecord[P], ...args: any[]) => void): any;
     on<P extends EventVK>(event: P, listener: () => void): any;
 
     addListener<P extends EventNVK>(event: P, listener: (m: TEventRecord[P], ...args: any[]) => void): any
     addListener<P extends EventVK>(event: P, listener: () => void): any;
+
+    addEventListener<P extends EventNVK>(event: P, listener: (m: TEventRecord[P], ...args: any[]) => void): any
+    addEventListener<P extends EventVK>(event: P, listener: () => void): any;
 
     removeListener<P extends EventVK>(event: P, listener: Function): any;
 
@@ -35,11 +42,12 @@ export type StrictEventEmitter<
 
     emit<P extends EmitNVK>(event: P, request: TEmitRecord[P]): any;
     emit<P extends EmitVK>(event: P): any;
-  }
+  }, NeededMethods>;
 
 export default StrictEventEmitter;
 
 export type NoUndefined<T> = T extends undefined ? never : T;
+
 export type StrictBroadcast<
   TEmitter extends TypeRecord<any, any, any>,
   TEmitRecord extends NoUndefined<TEmitter[' _emitType']> = NoUndefined<TEmitter[' _emitType']>,
