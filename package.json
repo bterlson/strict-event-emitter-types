@@ -1,7 +1,7 @@
 {
-  "name": "typed-event-emitter",
+  "name": "strict-event-emitter-types",
   "version": "1.0.0",
-  "description": "Strongly type any EventEmitter-like interface on any object",
+  "description": "Strictly and safely type any EventEmitter-like interface on any object",
   "main": "dist/src/index.js",
   "scripts": {
     "build": "tsc"

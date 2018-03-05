@@ -2,18 +2,18 @@
 
 **NOTE: REQUIRES TYPESCRIPT 2.8 SUPPORT FOR CONDITIONAL TYPES**
 
-A TypeScript library for strongly typed event emitters in 0 kB. Works with any kind of Event Emitter.
+A TypeScript library for strongly typed event emitters in 0 kB. Works with any kind of EventEmitter.
 
 ### Installing
 
 ```
-npm i typed-event-emitter
+npm i strict-event-emitter-types
 ```
 
 ### Usage
 
 ```ts
-import TypedEventEmitter from 'typed-event-emitter';
+import StrictEventEmitter from 'strict-event-emitter-types';
 
 // grab your event emitter
 import { EventEmitter } from 'events';
@@ -21,7 +21,7 @@ import { EventEmitter } from 'events';
 // define your events
 interface Events {
   newValue: number,
-  done: void // void signals an event with no payload
+  done: void // an event with no payload
 }
 
 // Create a typed event emitter
@@ -36,7 +36,7 @@ ee.emit('newValue', 'hello!'); // Error: incorrect payload
 ee.emit('newValue'); // Error: forgotten payload
 ```
 
-### TypedEventEmitter&lt;TEmitterType, TEventRecord, TEmitRecord>
+### StrictEventEmitter&lt;TEmitterType, TEventRecord, TEmitRecord>
 The default export. A generic type that takes three type parameters:
 
 1. *TEmitterType*: Your EventEmitter type (e.g. node's EventEmitter or socket.io socket)
@@ -49,9 +49,9 @@ The third parameter is handy when typing web sockets where client and server can
 // create types representing the server side and client
 // side sockets
 export type ServerSocket =
-  TypedEventEmitter<SocketIO.Socket, ServerSideProtocol, ClientSideProtocol>;
+  StrictEventEmitter<SocketIO.Socket, EventsFromServer, EventsFromClient>;
 export type ClientSocket =
-  TypedEventEmitter<SocketIOClient.Socket, ClientSideProtocol, ServerSideProtocol>;
+  TypedEventEmitter<SocketIOClient.Socket, EventsFromClient, EventsFromServer>;
 
 // elsewhere on server
 let socket: ServerSocket = new SocketIO.Socket();
@@ -60,15 +60,15 @@ let socket: ServerSocket = new SocketIO.Socket();
 let socket: ClientSocket = new SocketIOClient.Socket();
 ```
 
-### Broadcast&lt;TEmitter>
-A type for a function which takes (and strictly checks) an emit event and a payload. *TEmitter* is the event emitter type instantiated from TypedEventEmitter.
+### StrictBroadcast&lt;TEmitter>
+A type for a function which takes (and strictly checks) an emit event and a payload. *TEmitter* is the event emitter type instantiated from StrictEventEmitter.
 
 Useful for broadcast abstractions. It is not possible to contextually type assigments to this type, so your declarations will look something like this:
 
 ```ts
-import { Broadcast } from 'typed-event-emitter';
+import { StrictBroadcast } from 'strict-event-emitter-types';
 
-const broadcast: Broadcast<ServerSocket> = function (event: string, payload?: any) {
+const broadcast: StrictBroadcast<ServerSocket> = function (event: string, payload?: any) {
   // ...
 }
 ```

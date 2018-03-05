@@ -10,7 +10,7 @@ export interface TypeRecord<T, U, V> {
   ' _emitType'?: V
 }
 
-export type TypedEventEmitter<
+export type StrictEventEmitter<
   TEmitterType,
   TEventRecord,
   TEmitRecord = TEventRecord,
@@ -37,10 +37,10 @@ export type TypedEventEmitter<
     emit<P extends EmitVK>(event: P): any;
   }
 
-export default TypedEventEmitter;
+export default StrictEventEmitter;
 
 export type NoUndefined<T> = T extends undefined ? never : T;
-export type Broadcast<
+export type StrictBroadcast<
   TEmitter extends TypeRecord<any, any, any>,
   TEmitRecord extends NoUndefined<TEmitter[' _emitType']> = NoUndefined<TEmitter[' _emitType']>,
   VK extends VoidKeys<TEmitRecord> = VoidKeys<TEmitRecord>,
