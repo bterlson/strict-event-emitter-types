@@ -42,7 +42,7 @@ eei2.addListener('move', v => v.x + v.y);
 eei2.addListener('done', function () { });
 eei2.once('move', v => v.x + v.y);
 eei2.once('done', function () { });
-eei2.removeListener('move', v => v.x + v.y);
+eei2.removeListener('move', cb);
 eei2.removeListener('done', function () { });
 eei2.emit('moveRequest', { x: 1, y: 2 });
 eei2.emit('stop');
