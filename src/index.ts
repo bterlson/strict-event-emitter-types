@@ -33,7 +33,7 @@ export type OverriddenMethods<
     addEventListener<P extends EventNVK>(event: P, listener: (m: TEventRecord[P], ...args: any[]) => void): any
     addEventListener<P extends EventVK>(event: P, listener: () => void): any;
 
-    removeListener<P extends EventVK>(event: P, listener: Function): any;
+    removeListener<P extends EventVK | EventNVK>(event: P, listener: Function): any;
 
     once<P extends EventNVK>(event: P, listener: (m: TEventRecord[P], ...args: any[]) => void): any
     once<P extends EventVK>(event: P, listener: () => void): any;
