@@ -1,18 +1,21 @@
+// Returns any keys of TRecord with the type of TMatch
 export type MatchingKeys<
   TRecord,
   TMatch,
   K extends keyof TRecord = keyof TRecord
   > = K extends (TRecord[K] extends TMatch ? K : never) ? K : never;
 
+// Returns any property keys of Record with a void type
 export type VoidKeys<Record> = MatchingKeys<Record, void>;
 
-// really wish I could stash these under a unique symbol key
+// TODO: Stash under a symbol key once TS compiler bug is fixed
 export interface TypeRecord<T, U, V> {
   ' _emitterType'?: T,
   ' _eventsType'?: U,
   ' _emitType'?: V
 }
 
+// EventEmitter method overrides
 export type OverriddenMethods<
   TEventRecord,
   TEmitRecord = TEventRecord,
@@ -38,17 +41,26 @@ export type OverriddenMethods<
     emit<P extends EmitNVK>(event: P, request: TEmitRecord[P]): any;
     emit<P extends EmitVK>(event: P): any;
   }
+
 export type OverriddenKeys = keyof OverriddenMethods<any, any, any>
 
 export type StrictEventEmitter<
   TEmitterType,
   TEventRecord,
   TEmitRecord = TEventRecord,
-  UnneededMethods extends Exclude<OverriddenKeys, keyof TEmitterType> = Exclude<OverriddenKeys, keyof TEmitterType>,
-  NeededMethods extends Exclude<OverriddenKeys, UnneededMethods> = Exclude<OverriddenKeys, UnneededMethods>
+  UnneededMethods extends Exclude<OverriddenKeys, keyof TEmitterType>
+  = Exclude<OverriddenKeys, keyof TEmitterType>,
+  NeededMethods extends Exclude<OverriddenKeys, UnneededMethods>
+  = Exclude<OverriddenKeys, UnneededMethods>
   > =
-  TypeRecord<TEmitterType, TEventRecord, TEmitRecord> & // stores metadata
-  Pick<TEmitterType, Exclude<keyof TEmitterType, OverriddenKeys>> & // has all the properties of 
+  // Store the type parameters we've instantiated with so we can refer to them later
+  TypeRecord<TEmitterType, TEventRecord, TEmitRecord> &
+
+  // Pick all the methods on the original type we aren't going to override
+  Pick<TEmitterType, Exclude<keyof TEmitterType, OverriddenKeys>> &
+
+  // Finally, pick the needed overrides (taking care not to add an override for a method
+  // that doesn't exist)
   Pick<OverriddenMethods<TEventRecord, TEmitRecord>, NeededMethods>;
 
 export default StrictEventEmitter;
