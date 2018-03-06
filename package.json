@@ -27,6 +27,6 @@
   "devDependencies": {
     "@types/node": "^9.4.6",
     "dtslint": "^0.2.0",
-    "typescript": "^2.8.0-dev.20180301"
+    "typescript": "next"
   }
 }
