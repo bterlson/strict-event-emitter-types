@@ -1,5 +1,8 @@
-export type MatchingKeys<T, U, K extends keyof T = keyof T> =
-  K extends (T[K] extends U ? K : never) ? K : never;
+export type MatchingKeys<
+  TRecord,
+  TMatch,
+  K extends keyof TRecord = keyof TRecord
+  > = K extends (TRecord[K] extends TMatch ? K : never) ? K : never;
 
 export type VoidKeys<Record> = MatchingKeys<Record, void>;
 
