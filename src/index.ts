@@ -10,22 +10,14 @@ export interface TypeRecord<T, U, V> {
   ' _emitType'?: V
 }
 
-export type OverriddenKeys = 'on' | 'emit' | 'addListener' | 'once' | 'removeListener' | 'addEventListener';
-
-export type StrictEventEmitter<
-  TEmitterType,
+export type OverriddenMethods<
   TEventRecord,
   TEmitRecord = TEventRecord,
   EventVK extends VoidKeys<TEventRecord> = VoidKeys<TEventRecord>,
   EventNVK extends Exclude<keyof TEventRecord, EventVK> =  Exclude<keyof TEventRecord, EventVK>,
   EmitVK extends VoidKeys<TEmitRecord> = VoidKeys<TEmitRecord>,
-  EmitNVK extends Exclude<keyof TEmitRecord, EmitVK> =  Exclude<keyof TEmitRecord, EmitVK>,
-  UnneededMethods extends Exclude<OverriddenKeys, keyof TEmitterType> = Exclude<OverriddenKeys, keyof TEmitterType>,
-  NeededMethods extends Exclude<OverriddenKeys, UnneededMethods> = Exclude<OverriddenKeys, UnneededMethods>
-  > =
-  TypeRecord<TEmitterType, TEventRecord, TEmitRecord> & // stores metadata
-  Pick<TEmitterType, Exclude<keyof TEmitterType, OverriddenKeys>> & // has all the properties of 
-  Pick<{
+  EmitNVK extends Exclude<keyof TEmitRecord, EmitVK> =  Exclude<keyof TEmitRecord, EmitVK>
+  > = {
     on<P extends EventNVK>(event: P, listener: (m: TEventRecord[P], ...args: any[]) => void): any;
     on<P extends EventVK>(event: P, listener: () => void): any;
 
@@ -42,7 +34,19 @@ export type StrictEventEmitter<
 
     emit<P extends EmitNVK>(event: P, request: TEmitRecord[P]): any;
     emit<P extends EmitVK>(event: P): any;
-  }, NeededMethods>;
+  }
+export type OverriddenKeys = keyof OverriddenMethods<any, any, any>
+
+export type StrictEventEmitter<
+  TEmitterType,
+  TEventRecord,
+  TEmitRecord = TEventRecord,
+  UnneededMethods extends Exclude<OverriddenKeys, keyof TEmitterType> = Exclude<OverriddenKeys, keyof TEmitterType>,
+  NeededMethods extends Exclude<OverriddenKeys, UnneededMethods> = Exclude<OverriddenKeys, UnneededMethods>
+  > =
+  TypeRecord<TEmitterType, TEventRecord, TEmitRecord> & // stores metadata
+  Pick<TEmitterType, Exclude<keyof TEmitterType, OverriddenKeys>> & // has all the properties of 
+  Pick<OverriddenMethods<TEventRecord, TEmitRecord>, NeededMethods>;
 
 export default StrictEventEmitter;
 
