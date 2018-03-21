@@ -1,10 +1,11 @@
 {
   "name": "strict-event-emitter-types",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Strictly and safely type any EventEmitter-like interface on any object",
   "main": "dist/src/index.js",
   "scripts": {
-    "build": "tsc"
+    "build": "tsc",
+    "prepublish": "npm run build"
   },
   "types": "types/src",
   "repository": {
@@ -16,6 +17,9 @@
     "TS",
     "EventEmitter",
     "events"
+  ],
+  "files": [
+    "types"
   ],
   "author": "Brian Terlson <brian.terlson@microsoft.com>",
   "license": "ISC",
