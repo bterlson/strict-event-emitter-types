@@ -76,3 +76,22 @@ export type StrictBroadcast<
     <E extends NVK>(event: E, request: TEmitRecord[E]): any;
     <E extends VK>(event: E): any;
   }
+
+
+export type EventNames<
+  TEmitter extends TypeRecord<any, any, any>,
+  TEventRecord extends NoUndefined<TEmitter[' _eventsType']> = NoUndefined<TEmitter[' _eventsType']>,
+  TEmitRecord extends NoUndefined<TEmitter[' _emitType']> = NoUndefined<TEmitter[' _emitType']>
+  > = keyof TEmitRecord | keyof TEventRecord;
+
+export type OnEventNames<
+  TEmitter extends TypeRecord<any, any, any>,
+  TEventRecord extends NoUndefined<TEmitter[' _eventsType']> = NoUndefined<TEmitter[' _eventsType']>,
+  TEmitRecord extends NoUndefined<TEmitter[' _emitType']> = NoUndefined<TEmitter[' _emitType']>
+  > = keyof TEventRecord;
+
+export type EmitEventNames<
+  TEmitter extends TypeRecord<any, any, any>,
+  TEventRecord extends NoUndefined<TEmitter[' _eventsType']> = NoUndefined<TEmitter[' _eventsType']>,
+  TEmitRecord extends NoUndefined<TEmitter[' _emitType']> = NoUndefined<TEmitter[' _emitType']>
+  > = keyof TEmitRecord;

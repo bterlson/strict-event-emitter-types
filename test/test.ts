@@ -1,7 +1,7 @@
 // note that this file is never run, it's only type assertions
 // currently unsure how to do negative tests.
 
-import StrictEventEmitter, { StrictBroadcast } from '../src/index';
+import StrictEventEmitter, { StrictBroadcast, EventNames, OnEventNames, EmitEventNames } from '../src/index';
 
 
 // set up some events
@@ -35,6 +35,12 @@ eei.removeListener('done', function () { });
 eei.emit('move', { x: 1, y: 2 });
 eei.emit('done');
 
+let eventNames: EventNames<typeof eei>;
+eventNames = 'move';
+eventNames = 'done';
+
+
+
 let eei2: StrictEventEmitter<EventEmitter, Events, Emitables> = new EventEmitter();
 eei2.on('move', v => v.x + v.y);
 eei2.on('done', function () { });
@@ -47,14 +53,35 @@ eei2.removeListener('done', function () { });
 eei2.emit('moveRequest', { x: 1, y: 2 });
 eei2.emit('stop');
 
+let names2: EventNames<typeof eei2>;
+names2 = 'move';
+names2 = 'done';
+names2 = 'moveRequest';
+names2 = 'stop';
+
+let emitNames: EmitEventNames<typeof eei2>;
+emitNames = 'moveRequest';
+emitNames = 'stop';
+
+let onNames: OnEventNames<typeof eei2>;
+onNames = 'move';
+onNames = 'done';
+
+// names = 'asdf'; // should error
+
+
 var broadcast: StrictBroadcast<typeof eei2> = function (e: string, payload?: any) {
   if (e === 'move') {
     eei.emit(e, payload);
   } else if (e === 'done') {
     eei.emit(e);
+    return '1'; // can return anything
   }
 
   throw 'unknown event';
 };
 broadcast('stop');
 broadcast('moveRequest', { x: 1, y: 2 });
+
+
+
