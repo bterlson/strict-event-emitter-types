@@ -73,6 +73,6 @@ export type StrictBroadcast<
   VK extends VoidKeys<TEmitRecord> = VoidKeys<TEmitRecord>,
   NVK extends Exclude<keyof TEmitRecord, VK> =  Exclude<keyof TEmitRecord, VK>
   > = {
-    <E extends NVK>(event: E, request: TEmitRecord[E]): void;
-    <E extends VK>(event: E): void;
+    <E extends NVK>(event: E, request: TEmitRecord[E]): any;
+    <E extends VK>(event: E): any;
   }
