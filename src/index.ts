@@ -36,6 +36,10 @@ export type EEMethodReturnType<
   FValue = void
 > = S extends keyof T ? InnerEEMethodReturnType<T[S], TValue, FValue> : FValue;
 
+type ListenerType<T>  = [T] extends [(...args: infer U) => any]
+  ? U
+  : [T, ...any[]];
+
 // EventEmitter method overrides
 export type OverriddenMethods<
   TEmitter,
@@ -55,8 +59,9 @@ export type OverriddenMethods<
   on<P extends EventNVK, T>(
     this: T,
     event: P,
-    listener: (m: TEventRecord[P], ...args: any[]) => void
+    listener: (...args: ListenerType<TEventRecord[P]>) => void
   ): EEMethodReturnType<TEmitter, 'on', T>;
+
   on<P extends EventVK, T>(
     this: T,
     event: P,
@@ -66,8 +71,9 @@ export type OverriddenMethods<
   addListener<P extends EventNVK, T>(
     this: T,
     event: P,
-    listener: (m: TEventRecord[P], ...args: any[]) => void
+    listener: (...args: ListenerType<TEventRecord[P]>) => void
   ): EEMethodReturnType<TEmitter, 'addListener', T>;
+
   addListener<P extends EventVK, T>(
     this: T,
     event: P,
@@ -77,7 +83,7 @@ export type OverriddenMethods<
   addEventListener<P extends EventNVK, T>(
     this: T,
     event: P,
-    listener: (m: TEventRecord[P], ...args: any[]) => void
+    listener: (...args: ListenerType<TEventRecord[P]>) => void
   ): EEMethodReturnType<TEmitter, 'addEventListener', T>;
 
   addEventListener<P extends EventVK, T>(
@@ -97,14 +103,7 @@ export type OverriddenMethods<
     event: P,
     listener: Function
   ): EEMethodReturnType<TEmitter, 'removeListener', T>;
-  /*
-  The following definition should work IMO but causes assignability issues.
-  removeListener<P extends EventVK | EventNVK, T>(
-    this: T,
-    event: P,
-    listener: Function
-  ): EEMethodReturnType<TEmitter, 'removeListener', T>;
-*/
+
   removeEventListener<P extends EventNVK, T>(
     this: T,
     event: P,
@@ -120,7 +119,7 @@ export type OverriddenMethods<
   once<P extends EventNVK, T>(
     this: T,
     event: P,
-    listener: (m: TEventRecord[P], ...args: any[]) => void
+    listener: (...args: ListenerType<TEventRecord[P]>) => void
   ): EEMethodReturnType<TEmitter, 'once', T>;
   once<P extends EventVK, T>(
     this: T,
@@ -131,8 +130,9 @@ export type OverriddenMethods<
   emit<P extends EmitNVK, T>(
     this: T,
     event: P,
-    request: TEmitRecord[P]
+    ... args: ListenerType<TEmitRecord[P]>
   ): EEMethodReturnType<TEmitter, 'emit', T>;
+
   emit<P extends EmitVK, T>(
     this: T,
     event: P
