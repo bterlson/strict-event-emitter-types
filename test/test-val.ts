@@ -42,8 +42,6 @@ eei.removeListener('done', function() {});
 eei.emit('move', { x: 1, y: 2 });
 eei.emit('done');
 
-
-
 let eventNames: EventNames<typeof eei>;
 eventNames = 'move';
 eventNames = 'done';
@@ -64,11 +62,11 @@ eei2.removeListener('done', function() {});
 eei2.emit('moveRequest', { x: 1, y: 2 });
 eei2.emit('stop');
 
-let names2: EventNames<typeof eei2>;
-names2 = 'move';
-names2 = 'done';
-names2 = 'moveRequest';
-names2 = 'stop';
+let names: EventNames<typeof eei2>;
+names = 'move';
+names = 'done';
+names = 'moveRequest';
+names = 'stop';
 
 let emitNames: EmitEventNames<typeof eei2>;
 emitNames = 'moveRequest';

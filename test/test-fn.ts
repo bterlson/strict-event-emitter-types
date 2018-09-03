@@ -20,6 +20,7 @@ interface Events {
 
 interface Emitables {
   moveRequest: (from: Position, to: Position) => void;
+  jumpRequest: number;
   stop: void;
 }
 
@@ -62,3 +63,4 @@ eei2.removeListener('move', cb);
 eei2.removeListener('done', function() {});
 eei2.emit('moveRequest', { x: 1, y: 2 }, { x: 1, y: 2 });
 eei2.emit('stop');
+eei2.emit('jumpRequest', 10);

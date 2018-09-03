@@ -1,3 +1,13 @@
+// the overridden signatures need to be assignment compatible, but
+// due to how tuple types work[0] it's not possible to be assignment
+// compatible anymore. This hack fixes it with a unique symbol that
+// won't ever show up in parameter help etc.
+//
+// Unfortunately, this has the result of giving a poor error message when
+// you mix up types.
+// 0: https://github.com/Microsoft/TypeScript/issues/26013)
+declare const assignmentCompatibilityHack: unique symbol;
+
 // Returns any keys of TRecord with the type of TMatch
 export type MatchingKeys<
   TRecord,
@@ -36,107 +46,82 @@ export type EEMethodReturnType<
   FValue = void
 > = S extends keyof T ? InnerEEMethodReturnType<T[S], TValue, FValue> : FValue;
 
-type ListenerType<T>  = [T] extends [(...args: infer U) => any]
+type ListenerType<T> = [T] extends [(...args: infer U) => any]
   ? U
-  : [T, ...any[]];
+  : [T] extends [void] ? [] : [T];
 
 // EventEmitter method overrides
 export type OverriddenMethods<
   TEmitter,
   TEventRecord,
-  TEmitRecord = TEventRecord,
-  EventVK extends VoidKeys<TEventRecord> = VoidKeys<TEventRecord>,
-  EventNVK extends Exclude<keyof TEventRecord, EventVK> = Exclude<
-    keyof TEventRecord,
-    EventVK
-  >,
-  EmitVK extends VoidKeys<TEmitRecord> = VoidKeys<TEmitRecord>,
-  EmitNVK extends Exclude<keyof TEmitRecord, EmitVK> = Exclude<
-    keyof TEmitRecord,
-    EmitVK
-  >
+  TEmitRecord = TEventRecord
 > = {
-  on<P extends EventNVK, T>(
+  on<P extends keyof TEventRecord, T>(
     this: T,
     event: P,
     listener: (...args: ListenerType<TEventRecord[P]>) => void
   ): EEMethodReturnType<TEmitter, 'on', T>;
+  on(
+    event: typeof assignmentCompatibilityHack,
+    listener: (...args: any[]) => any
+  ): void;
 
-  on<P extends EventVK, T>(
-    this: T,
-    event: P,
-    listener: () => void
-  ): EEMethodReturnType<TEmitter, 'on', T>;
-
-  addListener<P extends EventNVK, T>(
+  addListener<P extends keyof TEventRecord, T>(
     this: T,
     event: P,
     listener: (...args: ListenerType<TEventRecord[P]>) => void
   ): EEMethodReturnType<TEmitter, 'addListener', T>;
+  addListener(
+    event: typeof assignmentCompatibilityHack,
+    listener: (...args: any[]) => any
+  ): void;
 
-  addListener<P extends EventVK, T>(
-    this: T,
-    event: P,
-    listener: () => void
-  ): EEMethodReturnType<TEmitter, 'addListener', T>;
-
-  addEventListener<P extends EventNVK, T>(
+  addEventListener<P extends keyof TEventRecord, T>(
     this: T,
     event: P,
     listener: (...args: ListenerType<TEventRecord[P]>) => void
   ): EEMethodReturnType<TEmitter, 'addEventListener', T>;
+  addEventListener(
+    event: typeof assignmentCompatibilityHack,
+    listener: (...args: any[]) => any
+  ): void;
 
-  addEventListener<P extends EventVK, T>(
+  removeListener<P extends keyof TEventRecord, T>(
     this: T,
     event: P,
-    listener: () => void
-  ): EEMethodReturnType<TEmitter, 'addEventListener', T>;
-
-  removeListener<P extends EventNVK, T>(
-    this: T,
-    event: P,
-    listener: Function
+    listener: (...args: any[]) => any
   ): EEMethodReturnType<TEmitter, 'removeListener', T>;
+  removeListener(
+    event: typeof assignmentCompatibilityHack,
+    listener: (...args: any[]) => any
+  ): void;
 
-  removeListener<P extends EventVK, T>(
+  removeEventListener<P extends keyof TEventRecord, T>(
     this: T,
     event: P,
-    listener: Function
-  ): EEMethodReturnType<TEmitter, 'removeListener', T>;
-
-  removeEventListener<P extends EventNVK, T>(
-    this: T,
-    event: P,
-    listener: Function
+    listener: (...args: any[]) => any
   ): EEMethodReturnType<TEmitter, 'removeEventListener', T>;
+  removeEventListener(
+    event: typeof assignmentCompatibilityHack,
+    listener: (...args: any[]) => any
+  ): void;
 
-  removeEventListener<P extends EventVK, T>(
-    this: T,
-    event: P,
-    listener: Function
-  ): EEMethodReturnType<TEmitter, 'removeEventListener', T>;
-
-  once<P extends EventNVK, T>(
+  once<P extends keyof TEventRecord, T>(
     this: T,
     event: P,
     listener: (...args: ListenerType<TEventRecord[P]>) => void
   ): EEMethodReturnType<TEmitter, 'once', T>;
-  once<P extends EventVK, T>(
+  once(
+    event: typeof assignmentCompatibilityHack,
+    listener: (...args: any[]) => any
+  ): void;
+
+  emit<P extends keyof TEmitRecord, T>(
     this: T,
     event: P,
-    listener: () => void
-  ): EEMethodReturnType<TEmitter, 'once', T>;
-
-  emit<P extends EmitNVK, T>(
-    this: T,
-    event: P,
-    ... args: ListenerType<TEmitRecord[P]>
+    ...args: ListenerType<TEmitRecord[P]>
   ): EEMethodReturnType<TEmitter, 'emit', T>;
-
-  emit<P extends EmitVK, T>(
-    this: T,
-    event: P
-  ): EEMethodReturnType<TEmitter, 'emit', T>;
+  emit(event: typeof assignmentCompatibilityHack, ...args: any[]): void;
 };
 
 export type OverriddenKeys = keyof OverriddenMethods<any, any, any>;

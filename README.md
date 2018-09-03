@@ -1,6 +1,6 @@
 ## Typed Event Emitter
 
-**NOTE: REQUIRES TYPESCRIPT 3.0 (nightly 20180721 or later)**
+**NOTE: REQUIRES TYPESCRIPT 3.0**
 
 A TypeScript library for strongly typed event emitters in 0 kB. Declare events using a simple interface mapping event names to their payloads to get stricter versions of `emit`, `on`, and other common EventEmitter APIs. Works with any kind of EventEmitter.
 
