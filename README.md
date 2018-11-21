@@ -25,7 +25,7 @@ interface Events {
 import { EventEmitter } from 'events';
 
 // Create strict event emitter types
-let ee: StrictEventEmitter<EventEmitter, Events> = new EventEmitter;
+let ee: StrictEventEmitter<EventEmitter, Events> = new EventEmitter();
 
 // now enjoy your strongly typed EventEmitter API!🎉
 
