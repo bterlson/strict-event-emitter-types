@@ -46,7 +46,7 @@ export type EEMethodReturnType<
   FValue = void
 > = S extends keyof T ? InnerEEMethodReturnType<T[S], TValue, FValue> : FValue;
 
-type ListenerType<T> = [T] extends [(...args: infer U) => any]
+export type ListenerType<T> = [T] extends [(...args: infer U) => any]
   ? U
   : [T] extends [void] ? [] : [T];
 
