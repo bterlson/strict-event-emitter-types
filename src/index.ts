@@ -122,6 +122,17 @@ export type OverriddenMethods<
     ...args: ListenerType<TEmitRecord[P]>
   ): EEMethodReturnType<TEmitter, 'emit', T>;
   emit(event: typeof assignmentCompatibilityHack, ...args: any[]): void;
+  
+  
+  off<P extends keyof TEventRecord, T>(
+    this: T,
+    event: P,
+    listener: (...args: ListenerType<TEventRecord[P]>) => void
+  ): EEMethodReturnType<TEmitter, 'off', T>;
+  off(
+    event: typeof assignmentCompatibilityHack,
+    listener: (...args: any[]) => any
+  ): void;
 };
 
 export type OverriddenKeys = keyof OverriddenMethods<any, any, any>;
