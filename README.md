@@ -94,6 +94,8 @@ clientSocket.on(/* only events that are sent from the server are allowed */, ...
 clientSocket.emit(/* only events that are emitted from the client are allowed */, ...)
 ```
 
+**Note**: socket.io has support for strictly typing events [since version 4.0.0](https://socket.io/docs/v4/migrating-from-3-x-to-4-0/#Typed-events). If you want to type socket.io events, consider using socket.io 4.0.0 (or newer versions) instead of using `strict-event-emitter-types`.
+
 ##### Usage with Subclasses
 
 To subclass an EventEmitter you need to cast the base EventEmitter to the strict EventEmitter before extending:
